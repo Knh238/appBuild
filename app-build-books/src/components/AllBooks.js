@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -19,7 +20,7 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import SearchIcon from '@material-ui/icons/Search';
+import InfoIcon from '@material-ui/icons/Info';
 import IconButton from '@material-ui/core/IconButton';
 
 const styles = theme => ({
@@ -36,8 +37,104 @@ const styles = theme => ({
   },
   menu: {
     width: 200
+  },
+  root: {
+    width: '100%',
+    marginTop: theme.spacing.unit * 3
+  },
+  table: {
+    minWidth: 500
+  },
+  tableWrapper: {
+    overflowX: 'auto'
   }
 });
+const actionsStyles = theme => ({
+  root: {
+    flexShrink: 0,
+    color: theme.palette.text.secondary,
+    marginLeft: theme.spacing.unit * 2.5
+  }
+});
+
+class TablePaginationActions extends React.Component {
+  handleFirstPageButtonClick = event => {
+    this.props.onChangePage(event, 0);
+  };
+
+  handleBackButtonClick = event => {
+    this.props.onChangePage(event, this.props.page - 1);
+  };
+
+  handleNextButtonClick = event => {
+    this.props.onChangePage(event, this.props.page + 1);
+  };
+
+  handleLastPageButtonClick = event => {
+    this.props.onChangePage(
+      event,
+      Math.max(0, Math.ceil(this.props.count / this.props.rowsPerPage) - 1)
+    );
+  };
+
+  render() {
+    const { classes, count, page, rowsPerPage, theme } = this.props;
+
+    return (
+      <div className={classes.root}>
+        <IconButton
+          onClick={this.handleFirstPageButtonClick}
+          disabled={page === 0}
+          aria-label="First Page"
+        >
+          {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+        </IconButton>
+        <IconButton
+          onClick={this.handleBackButtonClick}
+          disabled={page === 0}
+          aria-label="Previous Page"
+        >
+          {theme.direction === 'rtl' ? (
+            <KeyboardArrowRight />
+          ) : (
+            <KeyboardArrowLeft />
+          )}
+        </IconButton>
+        <IconButton
+          onClick={this.handleNextButtonClick}
+          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+          aria-label="Next Page"
+        >
+          {theme.direction === 'rtl' ? (
+            <KeyboardArrowLeft />
+          ) : (
+            <KeyboardArrowRight />
+          )}
+        </IconButton>
+        <IconButton
+          onClick={this.handleLastPageButtonClick}
+          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+          aria-label="Last Page"
+        >
+          {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+        </IconButton>
+      </div>
+    );
+  }
+}
+
+TablePaginationActions.propTypes = {
+  classes: PropTypes.object.isRequired,
+  count: PropTypes.number.isRequired,
+  onChangePage: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+  theme: PropTypes.object.isRequired
+};
+
+const TablePaginationActionsWrapped = withStyles(actionsStyles, {
+  withTheme: true
+})(TablePaginationActions);
 
 class AllBooks extends React.Component {
   constructor(props) {
@@ -46,7 +143,6 @@ class AllBooks extends React.Component {
   }
   componentDidMount() {
     this.setState({ rows: this.props.bookList });
-    console.log('allbooks props', this.props);
   }
   handleFirstPageButtonClick = event => {
     this.props.onChangePage(event, 0);
@@ -88,10 +184,9 @@ class AllBooks extends React.Component {
               <TableCell flexGrow="2">Title</TableCell>
               <TableCell flexGrow="3">Author </TableCell>
               <TableCell>Active</TableCell>
-
-              <TableCell>Amazon Rank</TableCell>
               <TableCell>Price</TableCell>
-              <TableCell>ibsn</TableCell>
+              <TableCell>Amazon Rank</TableCell>
+              <TableCell>IBSN</TableCell>
               <TableCell>Description & More Info</TableCell>
             </TableRow>
           </TableHead>
@@ -107,14 +202,27 @@ class AllBooks extends React.Component {
                         style={{ height: '25%' }}
                       />
                     </TableCell>
-                    <TableCell>{item.title}</TableCell>
-                    <TableCell>{item.authors[0].display_name}</TableCell>
-                    <TableCell>{item.active ? 'yes' : 'no'}</TableCell>
-
-                    <TableCell>{item.amazon_rank}</TableCell>
-                    <TableCell>${item.price} </TableCell>
                     <TableCell>
-                      <Typography>{item.isbns}</Typography>
+                      <Typography variant="h6">{item.title}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="h6">
+                        {item.authors[0].display_name}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="h6">
+                        {item.active ? 'yes' : 'no'}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="h6">${item.price}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="h6">{item.amazon_rank}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="h6">{item.isbns}</Typography>
                     </TableCell>
                     <TableCell>
                       <IconButton
@@ -124,12 +232,8 @@ class AllBooks extends React.Component {
                           state: item
                         }}
                       >
-                        <SearchIcon />
+                        <InfoIcon style={{ fontSize: 40, color: '#ba68c8' }} />
                       </IconButton>
-
-                      {/* <Link to="/SingleBook" bookId={item._id}>
-                        more info
-                      </Link> */}
                     </TableCell>
 
                     <TableCell />
@@ -150,6 +254,7 @@ class AllBooks extends React.Component {
                 }}
                 onChangePage={this.handleChangePage}
                 onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                ActionsComponent={TablePaginationActionsWrapped}
               />
             </TableRow>
           </TableFooter>

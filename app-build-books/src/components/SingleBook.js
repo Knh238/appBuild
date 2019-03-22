@@ -6,11 +6,13 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import CardHeader from '@material-ui/core/CardHeader';
 import Paper from '@material-ui/core/Paper';
 import { getSingleBookInfo } from '../store/booksReducer';
 import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
-
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import CancelIcon from '@material-ui/icons/Cancel';
 class SingleBook extends React.Component {
   constructor(props) {
     super(props);
@@ -52,35 +54,66 @@ class SingleBook extends React.Component {
             <img src={'https://' + book.image} style={{ height: '25%' }} />
           </CardContent>
           <CardContent>
-            <Typography align="center" variant="h4">
-              {book.authors[0].display_name}
+            <Typography align="center" variant="h3">
+              By: {book.authors[0].display_name}
             </Typography>
           </CardContent>
-
+          <CardContent align="center">
+            <Typography variant="h5">Active: </Typography>
+            {book.active ? (
+              <CheckCircleIcon style={{ fontSize: 40, color: 'green' }} />
+            ) : (
+              <CancelIcon style={{ fontSize: 40, color: 'red' }} />
+            )}
+          </CardContent>
           <CardContent>
-            <Typography align="center">description</Typography>
-            <Typography align="center">{this.state.description}</Typography>
+            <Typography align="center" variant="h5">
+              Primary Genre: {book.primary_bisacs}
+            </Typography>
+            <Typography align="center" variant="h5">
+              Publisher: {book.publisher}
+            </Typography>
           </CardContent>
         </Card>
-        <Card key={book._id + 'stats'} style={{ backgroundColor: '#bdbdbd' }}>
-          <CardContent>
-            <Typography align="center">amazon rank</Typography>
-            <Typography align="center">{book.amazon_rank}</Typography>
+        <Card style={{ backgroundColor: '#4dd0e1' }}>
+          <CardContent style={{ alignContent: 'flex-start' }}>
+            <Typography variant="h3">Description:</Typography>
+            <Typography
+              style={{ paddingLeft: 20, paddingRight: 20 }}
+              variant="h5"
+            >
+              {this.state.description}
+            </Typography>
           </CardContent>
-          <CardContent align="center">
-            <CardContent>
-              <Typography align="center">description</Typography>
-              <Typography align="center">{book.price}</Typography>
-            </CardContent>
-          </CardContent>
+        </Card>
+        <Card
+          key={book._id + 'stats'}
+          style={{
+            backgroundColor: '#9e9e9e',
+            display: 'flex',
+            flexDirection: 'row'
+          }}
+        >
           <CardContent>
-            <Typography align="center">description</Typography>
-            <Typography align="center">{book.ibsns}</Typography>
+            <Typography variant="h4" style={{ alignContent: 'center' }}>
+              Book Stats:
+            </Typography>
           </CardContent>
-
-          <CardContent>
-            <Typography align="center">description</Typography>
-            <Typography align="center">stuff</Typography>
+          <CardContent style={{ alignContent: 'flex-start' }}>
+            <Typography variant="h4">
+              Amazon Rank: {book.amazon_rank}
+            </Typography>
+            <Typography variant="h4">Price: ${book.price}</Typography>
+          </CardContent>
+          <CardContent style={{ alignContent: 'flex-end' }}>
+            <Typography variant="h5">Ibsn: {book.isbns}</Typography>
+            <Typography variant="h5">Book Key: {book.bookkey}</Typography>
+            <Typography variant="h5">
+              Newsletter References :
+              {book.ebb_newsletter_data
+                ? book.ebb_newsletter_data.length
+                : ' 0'}
+            </Typography>
           </CardContent>
         </Card>
       </Paper>
