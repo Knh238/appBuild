@@ -4,7 +4,7 @@ import { withRouter, Route, Switch } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 
-import { Home, AllBooks, FindBooks } from './components';
+import { Home, AllBooks, FindBooks, SingleBook } from './components';
 
 export default class Routes extends Component {
   render() {
@@ -13,12 +13,7 @@ export default class Routes extends Component {
         <Route exact path="/" component={Home} />
         <Route exact path="/AllBooks" component={AllBooks} />
         <Route exact path="/FindBooks" component={FindBooks} />
-        {/* <Route exact path="/Login" component={LoginForm} />
-        <Route exact path="/Signup" component={SignUpForm} />
-        // <Route exact path="/AllVideo" component={AllBooks} />
-        <Route exact path="/Track" component={TrackVideo} />
-        <Route exact path="/ViewHistory" component={VideoViews} />
-        <Route exact path="/Keyword" component={KeywordListing} /> */}
+        <Route exact path="/SingleBook" component={SingleBook} />
       </Switch>
     );
   }

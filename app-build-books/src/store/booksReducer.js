@@ -2,7 +2,7 @@ import history from '../history';
 import booksData from './bookInfo';
 
 const GOT_BOOK_LIST = 'GOT_BOOK_LIST';
-const GOT_CURRENT_SERIES = 'GOT_CURRENT_SERIES';
+const GOT_CURRENT_BOOK = 'GOT_CURRENT_BOOK';
 const GOT_QUOTES = 'GOT_QUOTES';
 const GOT_DATES = 'GOT_DATES';
 const ADDED_DATES = 'ADDED_DATES';
@@ -11,9 +11,9 @@ const gotBookList = list => ({
   type: GOT_BOOK_LIST,
   list
 });
-const gotCurrentSeries = series => ({
-  type: GOT_CURRENT_SERIES,
-  series
+const gotCurrentBook = book => ({
+  type: GOT_CURRENT_BOOK,
+  book
 });
 const gotQuotes = quotes => ({
   type: GOT_QUOTES,
@@ -28,30 +28,8 @@ const addedDates = dates => ({
   dates
 });
 
-export const getSeries = id => dispatch => {
-  // request.get(
-  //   `https://www.goodreads.com/series/show?key=0PwPMvqFRKns4bpgBnkRg&id=${id}.xml`,
-  //   (err, res, body) => {
-  //     if (err) {
-  //       return console.log(err);
-  //     }
-  //     console.log(body.url);
-  //     console.log(body.explanation);
-  //     var xml = body;
-  //     var result1 = convert.xml2json(xml, {
-  //       compact: true,
-  //       spaces: 2,
-  //       ignoreDoctype: true,
-  //       ignoreDeclaration: true
-  //     });
-  //     // const {series} = result1.series
-  //     const resBody = JSON.parse(result1);
-  //     const series = resBody.GoodreadsResponse.series;
-  //     console.log(series);
-  //     dispatch(gotCurrentSeries(series));
-  //     // return result1
-  //   }
-  // );
+export const getSingleBookInfo = id => dispatch => {
+  //     dispatch(gotCurrentBook(book));
 };
 
 export const getBookList = id => dispatch => {
@@ -91,7 +69,7 @@ export const getBookList = id => dispatch => {
 const initialState = {
   books: [],
   bookList: [],
-  currentSeries: [],
+  currentBook: [],
   quotes: [],
   dates: []
 };
@@ -100,10 +78,10 @@ const booksReducer = (state = initialState, action) => {
   switch (action.type) {
     case GOT_BOOK_LIST:
       return { ...state, bookList: action.list };
-    case GOT_CURRENT_SERIES:
+    case GOT_CURRENT_BOOK:
       return {
         ...state,
-        currentSeries: [...state.currentSeries, action.series]
+        currentBook: [...state.currentBook, action.book]
       };
     case GOT_QUOTES:
       return {

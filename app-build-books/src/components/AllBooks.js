@@ -19,6 +19,8 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
+import SearchIcon from '@material-ui/icons/Search';
+import IconButton from '@material-ui/core/IconButton';
 
 const styles = theme => ({
   container: {
@@ -40,10 +42,10 @@ const styles = theme => ({
 class AllBooks extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { page: 0, rowsPerPage: 10 };
+    this.state = { rows: [], page: 0, rowsPerPage: 10 };
   }
   componentDidMount() {
-    //   this.props.getBookList('123');
+    this.setState({ rows: this.props.bookList });
     console.log('allbooks props', this.props);
   }
   handleFirstPageButtonClick = event => {
@@ -51,11 +53,11 @@ class AllBooks extends React.Component {
   };
 
   handleBackButtonClick = event => {
-    this.props.onChangePage(event, this.props.page - 1);
+    this.props.onChangePage(event, this.state.page - 1);
   };
 
   handleNextButtonClick = event => {
-    this.props.onChangePage(event, this.props.page + 1);
+    this.props.onChangePage(event, this.state.page + 1);
   };
 
   handleLastPageButtonClick = event => {
@@ -76,6 +78,7 @@ class AllBooks extends React.Component {
     const books = this.props.bookList;
     const twoBookTest = books.slice(0, 10);
     console.log('this books at 1 is ', books[0]);
+    const { rows, rowsPerPage, page } = this.state;
     return (
       <Paper className={styles.root}>
         <Table>
@@ -85,43 +88,54 @@ class AllBooks extends React.Component {
               <TableCell flexGrow="2">Title</TableCell>
               <TableCell flexGrow="3">Author </TableCell>
               <TableCell>Active</TableCell>
-              <TableCell flexGrow="1">Description</TableCell>
 
               <TableCell>Amazon Rank</TableCell>
               <TableCell>Price</TableCell>
               <TableCell>ibsn</TableCell>
+              <TableCell>Description & More Info</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {books.map(item => {
-              return (
-                <TableRow key={item._id}>
-                  <TableCell>
-                    <img
-                      src={'https://' + item.image}
-                      style={{ height: '25%' }}
-                    />
-                  </TableCell>
-                  <TableCell>{item.title}</TableCell>
-                  <TableCell>{item.authors[0].display_name}</TableCell>
-                  <TableCell>{item.active ? 'yes' : 'no'}</TableCell>
-                  <TableCell>
-                    {/* <Link to="/sampleSeries" className="cuteLink"> */}
-                    <Typography>
-                      item.description?(item.description.slice(8, 60):('none')
-                    </Typography>
-                    {/* </Link> */}
-                  </TableCell>
-                  <TableCell>{item.amazon_rank}</TableCell>
-                  <TableCell>${item.price} </TableCell>
-                  <TableCell>
-                    <Typography>{item.isbns}</Typography>
-                  </TableCell>
+            {books
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map(item => {
+                return (
+                  <TableRow key={item._id}>
+                    <TableCell>
+                      <img
+                        src={'https://' + item.image}
+                        style={{ height: '25%' }}
+                      />
+                    </TableCell>
+                    <TableCell>{item.title}</TableCell>
+                    <TableCell>{item.authors[0].display_name}</TableCell>
+                    <TableCell>{item.active ? 'yes' : 'no'}</TableCell>
 
-                  <TableCell />
-                </TableRow>
-              );
-            })}
+                    <TableCell>{item.amazon_rank}</TableCell>
+                    <TableCell>${item.price} </TableCell>
+                    <TableCell>
+                      <Typography>{item.isbns}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <IconButton
+                        component={Link}
+                        to={{
+                          pathname: '/SingleBook',
+                          state: item
+                        }}
+                      >
+                        <SearchIcon />
+                      </IconButton>
+
+                      {/* <Link to="/SingleBook" bookId={item._id}>
+                        more info
+                      </Link> */}
+                    </TableCell>
+
+                    <TableCell />
+                  </TableRow>
+                );
+              })}
           </TableBody>
           <TableFooter>
             <TableRow>
@@ -136,7 +150,6 @@ class AllBooks extends React.Component {
                 }}
                 onChangePage={this.handleChangePage}
                 onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                // ActionsComponent={TablePaginationActionsWrapped}
               />
             </TableRow>
           </TableFooter>
