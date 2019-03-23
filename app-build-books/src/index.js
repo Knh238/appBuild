@@ -22,7 +22,12 @@ import App from './App';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles/';
 
-const theme = createMuiTheme({ palette: { type: 'dark' } });
+const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true
+  },
+  palette: { type: 'dark' }
+});
 
 ReactDOM.render(
   <Provider store={store}>

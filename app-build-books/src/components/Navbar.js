@@ -7,11 +7,9 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
-import Icon from '@material-ui/core/Icon';
 import Home from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
 import CollectionsBookmarkIcon from '@material-ui/icons/CollectionsBookmark';
-import HistoryIcon from '@material-ui/icons/History';
 import { getBookList } from '../store/booksReducer';
 
 import { connect } from 'react-redux';
@@ -23,7 +21,6 @@ class Navbar extends React.Component {
   }
   componentDidMount() {
     this.props.getBookList('123');
-    console.log('this has been called?');
   }
 
   render() {
@@ -40,7 +37,6 @@ class Navbar extends React.Component {
           </IconButton>
 
           <Button
-            small
             variant="contained"
             style={{ backgroundColor: '#ef9a9a', marginLeft: 10 }}
             component={Link}
@@ -53,12 +49,11 @@ class Navbar extends React.Component {
           </Button>
           <div style={{ flexGrow: 1 }}>
             <Typography align="center" variant="h5" color="inherit" noWrap>
-              Coding Challenge Submission: Kristin
+              Coding Challenge: Kristin Harper
             </Typography>
           </div>
           <div style={{ float: 'right' }}>
             <Button
-              small
               variant="contained"
               style={{ backgroundColor: '#ef9a9a', marginLeft: 10 }}
               component={Link}

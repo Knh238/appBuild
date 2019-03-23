@@ -9,13 +9,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableFooter from '@material-ui/core/TableFooter';
 import TableRow from '@material-ui/core/TableRow';
-import MenuItem from '@material-ui/core/MenuItem';
-import TextField from '@material-ui/core/TextField';
 import { getBookList } from '../store/booksReducer';
 import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import Avatar from '@material-ui/core/Avatar';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
@@ -172,8 +169,7 @@ class AllBooks extends React.Component {
 
   render() {
     const books = this.props.bookList;
-    const twoBookTest = books.slice(0, 10);
-    console.log('this books at 1 is ', books[0]);
+
     const { rows, rowsPerPage, page } = this.state;
     return (
       <Paper className={styles.root}>
@@ -199,6 +195,7 @@ class AllBooks extends React.Component {
                     <TableCell>
                       <img
                         src={'https://' + item.image}
+                        alt={item.title}
                         style={{ height: '25%' }}
                       />
                     </TableCell>

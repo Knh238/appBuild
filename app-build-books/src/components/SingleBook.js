@@ -2,14 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardHeader from '@material-ui/core/CardHeader';
 import Paper from '@material-ui/core/Paper';
-import { getSingleBookInfo } from '../store/booksReducer';
-import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
@@ -24,7 +18,6 @@ class SingleBook extends React.Component {
 
     this.setState({ bookInfo });
     this.formatDescription();
-    // this.props.getSingleBookInfo(bookId);
   }
 
   formatDescription() {
@@ -41,7 +34,7 @@ class SingleBook extends React.Component {
   }
   render() {
     const book = this.props.location.state;
-    console.log('these books', this.state.bookInfo);
+
     return (
       <Paper>
         <Card key={book._id}>
@@ -51,7 +44,11 @@ class SingleBook extends React.Component {
             </Typography>
           </CardContent>
           <CardContent align="center">
-            <img src={'https://' + book.image} style={{ height: '25%' }} />
+            <img
+              src={'https://' + book.image}
+              alt={book.title}
+              style={{ height: '25%' }}
+            />
           </CardContent>
           <CardContent>
             <Typography align="center" variant="h3">
@@ -129,13 +126,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    getSingleBookInfo: id => dispatch(getSingleBookInfo(id))
-  };
-};
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  null
 )(SingleBook);

@@ -1,5 +1,5 @@
-import createHistory from 'history/createBrowserHistory';
-import createMemoryHistory from 'history/createMemoryHistory';
+var createHistory = require('history').createBrowserHistory;
+var createMemoryHistory = require('history').createMemoryHistory;
 
 const history =
   process.env.NODE_ENV === 'test' ? createMemoryHistory() : createHistory();
